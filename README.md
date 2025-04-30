@@ -320,15 +320,18 @@ ORDER BY total_borrowers asc;
 ## Results
 - What does the dashboard look like?
   ![Power BI Dashboard](fairmoney_front_page.png)
-This gives an overview of the FairMoney debtors, showing the total disbursed amount, total repaid, total outstanding, repayment rate, %calls answered, state wise recovery performance, call outcome by call status, Repayment rate(%) by call status, Avg days Late by Month, Repayment rate by Occupation, Repayment rate & answered call vs customer type.
+  
+- This gives an overview of the FairMoney debtors, showing the total disbursed amount, total repaid, total outstanding, repayment rate, %calls answered, state wise recovery performance, call outcome by call status, Repayment rate(%) by call status, Avg days Late by Month, Repayment rate by Occupation, Repayment rate & answered call vs customer type.
 
 
  ![Power Bi Dashboard](fairmoney_brekadown.png)
-This gives the discrepancy explanation, customer type comparison, loan amount breakdown, state-wise outstanding debt, Avg days late by call status
+ 
+- This gives the discrepancy explanation, customer type comparison, loan amount breakdown, state-wise outstanding debt, Avg days late by call status
 
 
  ![Power BI Dashboard](Fairmrepayment_analysis.png)
-This goes further to show the top 5 outstanding debtors by amount, call outcome by repayment, answered calls by customer type, repayment trend date, call effect on repayment, and an information table.
+ 
+- This goes further to show the top 5 outstanding debtors by amount, call outcome by repayment, answered calls by customer type, repayment trend date, call effect on repayment, and an information table.
 
 These interactive dashboards allow users to drill deeper into the data, enabling more detailed analysis and supporting stronger, data-driven decision-making.
 
