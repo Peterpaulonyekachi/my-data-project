@@ -69,7 +69,7 @@ We need two sets of data:
    and other details to aid in-depth analysis
 
 - Where is the data coming from?
-The data is sourced from a call center agency that helps with making calls for Loan companies like Fairmoney. The dataset that contains the details of debtors is obtained from Fairmoney Company.
+The data is sourced from a call center agency that helps make calls for loan companies like Fairmoney. The dataset containing debtor details is obtained from Fairmoney Company.
 
 # Stages
 - Design
@@ -99,3 +99,68 @@ To understand what it should contain, we need to find out what questions we need
 | Power BI | Visualizing the data by creating interactive dashboards |
 | Python | For predictive analysis |
 | GitHub | Hosting, and documentation of the  project |
+
+# Development
+
+## Pseudocode
+
+- What's the general approach in creating this solution from start to finish?
+
+1. Get the data
+2. Explore the data in Excel
+3. Load the data into SQL Server
+4. Clean the data with SQL queries
+5. Test the data with SQL queries
+6. Visualize the data in Power BI
+7. Generate the findings based on the insights derived
+8. Documentation
+9. Publish data
+
+## Data Exploration Notes
+
+During the data exploration stage, I scan the data to look for errors, data inconsistencies, bugs, and irregularities
+
+- What are the observations with the dataset?
+
+1. **Multiple Call Attempts**: Several phone numbers appeared with different call statuses such as Answered, Busy, Congested, and Not Answered, indicating that debtors were contacted multiple times in attempts to reach them.
+2. **Inconsistent State Entries**: The State column contained inconsistencies, including misspelled state names and irregular capitalization, which could affect data accuracy and analysis.
+3. **Phone Number Format Mismatch**: The phone numbers in both tables were recorded in different formats. For effective data integration and to enable accurate joins using SQL, it is essential to standardize the phone number format across both datasets.
+
+## Data Cleaning
+It is expected that I clean the data of all its inconsistencies and irregularities
+
+The cleaned data is expected to meet the following criteria
+- Phone number format consistency
+- State column standardization
+- Call statsus simplification
+- Date column validation
+- Numeric fields validation (amount_disbursed, amount_repaid, total_outstanding_amount)
+- Unique identifiers and joins
+- Consistent categorical values
+
+- What steps are needed to clean the data and shape it into the desired format?
+
+  1. Clean phone numbers for joining
+  2. Standardize state name (Use a reference list of valid Nigerian states)
+  3. Normalize call status
+  4. Ensure date format consistency
+  5. Fix categorical values
+  6. Remove or flag incomplete or inaccurate rows
+
+### Transform the data
+/** Ensuring standardized naming of state**/
+UPDATE dbo.fairmoney_details
+SET state = UPPER(LEFT(state,1)) + LOWER(SUBSTRING(state,2,len(state)));
+
+### Create the SQL View
+/** Create a Temporary view with distinct call status per phone**/
+WITH distinct_calls AS (
+	SELECT
+		fc.phone_number,
+		MAX(CASE WHEN call_status = 'answered' THEN 1 ELSE 0 END) AS has_answered_call
+	FROM fairmoney_call fc
+	GROUP BY fc.phone_number
+)
+SELECT * FROM distinct_calls;
+
+### Customer Segmentation
