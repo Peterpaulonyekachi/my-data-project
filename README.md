@@ -148,11 +148,13 @@ The cleaned data is expected to meet the following criteria
   6. Remove or flag incomplete or inaccurate rows
 
 ### Transform the data
+```sql
 /** Ensuring standardized naming of state**/
 UPDATE dbo.fairmoney_details
 SET state = UPPER(LEFT(state,1)) + LOWER(SUBSTRING(state,2,len(state)));
-
+```
 ### Create the SQL View
+```sql
 /** Create a Temporary view with distinct call status per phone**/
 WITH distinct_calls AS (
 	SELECT
@@ -162,5 +164,5 @@ WITH distinct_calls AS (
 	GROUP BY fc.phone_number
 )
 SELECT * FROM distinct_calls;
-
+```
 ### Customer Segmentation
