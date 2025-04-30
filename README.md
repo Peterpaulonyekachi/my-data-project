@@ -208,6 +208,112 @@ LEFT JOIN distinct_calls dc ON fd.phone_number = dc.phone_number
 GROUP BY COALESCE(dc.has_answered_call, 0);
 ```
 ### Output
-![Repayment rate](Repayment rate.png)
+![Repayment rate](Repayment_rate.png)
+
+### Call Distribution Status
+```sql
+SELECT 
+    call_status,
+    COUNT(*) AS total_calls,
+    ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (), 2) AS percentage
+FROM fairmoney_call
+GROUP BY call_status;
+```
+### Output
+![Call distribution status](call_distribution_status.png)
+
+### Customer Segmentation
+```sql
+WITH distinct_calls AS (
+    SELECT 
+        phone_number,
+        MAX(CASE WHEN LOWER(call_status) = 'answered' THEN 1 ELSE 0 END) AS has_answered_call
+    FROM fairmoney_call
+    GROUP BY phone_number
+)
+
+SELECT 
+    fd.customer_type,
+    COUNT(DISTINCT fd.phone_number) AS total_borrowers,
+    COUNT(DISTINCT CASE WHEN COALESCE(dc.has_answered_call, 0) = 1 THEN fd.phone_number END) AS with_answered_calls,
+    ROUND(COUNT(DISTINCT CASE WHEN COALESCE(dc.has_answered_call, 0) = 1 THEN fd.phone_number END) * 100.0 / NULLIF(COUNT(DISTINCT fd.phone_number), 0), 2) AS pct_answered_calls,
+
+    -- Repayment
+    ROUND(SUM(fd.amount_repaid) * 100.0 / NULLIF(SUM(fd.amount_to_repay_today), 0), 2) AS repayment_rate_today_pct,
+    ROUND(SUM(fd.amount_repaid) * 100.0 / NULLIF(SUM(fd.total_outstanding_amount), 0), 2) AS repayment_rate_outstanding_pct,
+
+    -- Lateness
+    ROUND(AVG(fd.days_late), 2) AS avg_days_late
+
+FROM fairmoney_details fd
+LEFT JOIN distinct_calls dc ON fd.phone_number = dc.phone_number
+GROUP BY fd.customer_type
+ORDER BY fd.customer_type;
+```
+### Output
+![Customer segmentation](customer_segmentation.png)
+
+### State Segmentation
+```sql
+WITH distinct_calls AS (
+    SELECT 
+        phone_number,
+        MAX(CASE WHEN LOWER(call_status) = 'answered' THEN 1 ELSE 0 END) AS has_answered_call
+    FROM fairmoney_call
+    GROUP BY phone_number
+)
+
+SELECT 
+    fd.state,
+    COUNT(DISTINCT fd.phone_number) AS total_borrowers,
+    COUNT(DISTINCT CASE WHEN COALESCE(dc.has_answered_call, 0) = 1 THEN fd.phone_number END) AS with_answered_calls,
+    ROUND(COUNT(DISTINCT CASE WHEN COALESCE(dc.has_answered_call, 0) = 1 THEN fd.phone_number END) * 100.0 / NULLIF(COUNT(DISTINCT fd.phone_number), 0), 2) AS pct_answered_calls,
+
+    -- Repayment
+    ROUND(SUM(fd.amount_repaid) * 100.0 / NULLIF(SUM(fd.amount_to_repay_today), 0), 2) AS repayment_rate_today_pct,
+    ROUND(SUM(fd.amount_repaid) * 100.0 / NULLIF(SUM(fd.total_outstanding_amount), 0), 2) AS repayment_rate_outstanding_pct,
+
+    -- Lateness
+    ROUND(AVG(fd.days_late), 2) AS avg_days_late
+
+FROM fairmoney_details fd
+LEFT JOIN distinct_calls dc ON fd.phone_number = dc.phone_number
+GROUP BY fd.state
+ORDER BY fd.state;
+```
+### Output
+![State Segmentation](state_segmentation.png)
+
+### Occupation Segmentation
+```sql
+WITH distinct_calls AS (
+    SELECT 
+        phone_number,
+        MAX(CASE WHEN LOWER(call_status) = 'answered' THEN 1 ELSE 0 END) AS has_answered_call
+    FROM fairmoney_call
+    GROUP BY phone_number
+)
+
+SELECT 
+    fd.occupation,
+    COUNT(DISTINCT fd.phone_number) AS total_borrowers,
+    COUNT(DISTINCT CASE WHEN COALESCE(dc.has_answered_call, 0) = 1 THEN fd.phone_number END) AS with_answered_calls,
+    ROUND(COUNT(DISTINCT CASE WHEN COALESCE(dc.has_answered_call, 0) = 1 THEN fd.phone_number END) * 100.0 / NULLIF(COUNT(DISTINCT fd.phone_number), 0), 2) AS pct_answered_calls,
+
+    -- Repayment
+    ROUND(SUM(fd.amount_repaid) * 100.0 / NULLIF(SUM(fd.amount_to_repay_today), 0), 2) AS repayment_rate_today_pct,
+    ROUND(SUM(fd.amount_repaid) * 100.0 / NULLIF(SUM(fd.total_outstanding_amount), 0), 2) AS repayment_rate_outstanding_pct,
+
+    -- Lateness
+    ROUND(AVG(fd.days_late), 2) AS avg_days_late
+
+FROM fairmoney_details fd
+LEFT JOIN distinct_calls dc ON fd.phone_number = dc.phone_number
+GROUP BY fd.occupation
+ORDER BY total_borrowers asc;
+```
+### Output
+![Occupation Segmentation](occupation_segmentation.png)
+
 
 
