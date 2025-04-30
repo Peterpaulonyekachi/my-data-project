@@ -181,7 +181,7 @@ FROM fairmoney_details fd
 LEFT JOIN fairmoney_call fc ON fd.phone_number = fc.phone_number;
 ```
 ### Output
-![%age Borrowers who received at least one call](%Borrowers.png)
+![%age Borrowers who received at least one call](Borrowers.png)
 
 ### Repayment Rate
 ```sql
