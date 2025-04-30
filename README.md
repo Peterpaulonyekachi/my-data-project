@@ -167,4 +167,47 @@ SELECT * FROM distinct_calls;
 ```
 ### Output
 ![Distinct call status per phone](distinct_call.png)
-### Customer Segmentation
+
+### Borrowers who received at least one call
+```sql
+/** %age of Borrowers who received at least one call**/
+SELECT
+	COUNT(DISTINCT fd.phone_number) AS total_borrowers,
+	COUNT(DISTINCT fc.phone_number) AS borrowers_contacted,
+    ROUND(
+        COUNT(DISTINCT fc.phone_number) * 100.0 / COUNT(DISTINCT fd.phone_number), 2
+    ) AS percent_contacted
+FROM fairmoney_details fd
+LEFT JOIN fairmoney_call fc ON fd.phone_number = fc.phone_number;
+```
+### Output
+![%age Borrowers who received at least one call](%Borrowers.png)
+
+### Repayment Rate
+```sql
+-- Combine borrower data with whether they had answered calls
+WITH distinct_calls AS (
+    SELECT 
+        phone_number,
+        MAX(CASE WHEN call_status = 'answered' THEN 1 ELSE 0 END) AS has_answered_call
+    FROM fairmoney_call
+    GROUP BY phone_number
+)
+
+SELECT 
+    CASE 
+        WHEN COALESCE(dc.has_answered_call, 0) = 1 THEN 'Answered'
+        ELSE 'Not Answered or No Call'
+    END AS call_group,
+    COUNT(DISTINCT fd.phone_number) AS borrowers,
+    SUM(fd.amount_repaid) AS total_repaid,
+    SUM(fd.amount_to_repay_today) AS total_due_today,
+    ROUND(SUM(fd.amount_repaid) * 100.0 / NULLIF(SUM(fd.amount_to_repay_today), 0), 2) AS repayment_rate_pct
+FROM fairmoney_details fd
+LEFT JOIN distinct_calls dc ON fd.phone_number = dc.phone_number
+GROUP BY COALESCE(dc.has_answered_call, 0);
+```
+### Output
+![Repayment rate](Repayment rate.png)
+
+
