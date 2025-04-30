@@ -166,5 +166,5 @@ WITH distinct_calls AS (
 SELECT * FROM distinct_calls;
 ```
 ### Output
-![Distinct call status per phone]
+![Distinct call status per phone](distinct_call.png)
 ### Customer Segmentation
