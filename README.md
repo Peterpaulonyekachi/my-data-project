@@ -165,4 +165,6 @@ WITH distinct_calls AS (
 )
 SELECT * FROM distinct_calls;
 ```
+### Output
+![Distinct call status per phone]
 ### Customer Segmentation
