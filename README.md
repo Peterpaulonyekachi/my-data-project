@@ -315,5 +315,96 @@ ORDER BY total_borrowers asc;
 ### Output
 ![Occupation Segmentation](occupation_segmentation.png)
 
+# Visualization
+
+## Results
+- What does the dashboard look like?
+  ![Power BI Dashboard](fairmoney_overview.png)
+  This gives an overview of the FairMoney debtors, showing the total disbursed amount, total repaid, total outstanding, repayment rate, %calls answered, state wise recovery performance, call outcome by call status, Repayment rate(%) by call status, Avg days Late by Month, Repayment rate by Occupation, Repayment rate & answered call vs customer type.
+ ![Power Bi Dashboard](fairmoney_brekadown.png)
+ This gives the discrepancy explanation, customer type comparison, loan amount breakdown, state-wise outstanding debt, Avg days late by call status
+ ![Power BI Dashboard](Fairmrepayment_analysis.png)
+This goes further to show the top 5 outstanding debtors by amount, call outcome by repayment, answered calls by customer type, repayment trend date, call effect on repayment, and an information table.
+
+These interactive dashboards allow users to drill deeper into the data, enabling more detailed analysis and supporting stronger, data-driven decision-making.
+
+## Dax Measures
+
+### 1. Answered Calls (%)
+```sql
+% Answered Calls = 
+VAR AnsweredCount =
+    CALCULATE(
+        DISTINCTCOUNT(fairmoney_call[phone_number]),
+        fairmoney_call[call_status] = "answered"
+    )
+VAR TotalCount =
+    CALCULATE(
+        DISTINCTCOUNT(fairmoney_details[phone_number])
+    )
+RETURN
+DIVIDE(AnsweredCount, TotalCount, 0)
+```
+
+### 2. Call engagement ratio
+```sql
+Call_Engagement_Ratio = 
+DIVIDE(
+    [Answered_Calls],
+    [Total_Calls],
+    BLANK()
+)
+```
+
+### 3. Discrepancy
+```sql
+Discrepancy = [Total Repaid] + [Total Outstanding] - [Total Disbursed]
+```
+
+### 4. Recovery Rate
+```sql
+Recovery Rate (%) = 
+ROUND(DIVIDE(
+    SUM(fairmoney_details[amount_repaid]),
+    SUM(fairmoney_details[total_outstanding_amount]),
+    0
+),
+1
+)
+```
+
+### 5. Repayment Rate
+```sql
+Repayment Rate (%) = 
+VAR Repaid = SUM(fairmoney_details[amount_repaid])
+VAR Outstanding = SUM(fairmoney_details[total_outstanding_amount])
+VAR TotalToRepay = Repaid + Outstanding
+RETURN
+ROUND(
+    DIVIDE(Repaid, TotalToRepay, 0),
+    2
+)
+```
+
+### 6. Total Calls
+```sql
+Total_Calls = COUNT(fairmoney_call[phone_Number])
+
+```
+
+### 7. Total Repaid
+```sql
+Total Repaid = sum(fairmoney_details[amount_repaid])
+```
+
+### 8. Total Outstanding
+```sql
+Total Outstanding = SUM(fairmoney_details[total_outstanding_amount])
+```
+
+### 9. Total Disbursed
+```sql
+Total Disbursed = sum(fairmoney_details[amount_disbursed])
+```
 
 
