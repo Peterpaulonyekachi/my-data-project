@@ -13,7 +13,21 @@ A data analysis project for Loan Management and Recovery
 - [Data Source](#data-source)
 - [Stages](#stages)
 - [Design](#design)
-- [Tools](#tools)
+  - [Tools](#tools)
+- [Development](#development)
+  - [Pseudocode](#pseudocode)
+  - [Data Exploration Notes](#data-exploration)
+  - [Data Cleaning](#data-cleaning)
+  - [Transform the Data](#transform-the-data)
+  - [Create the SQL View](#create-the-sql-view)
+- [Visualization](#visualization)
+  - [Results](#results)
+  - [DAX Measures](#dax-measures)
+- [Analysis](#analysis)
+  - [Findings](#findings)
+  - [Interpretation](#interpretation)
+- [Recommendations](#recommendations)
+  
 
 
 
@@ -414,4 +428,108 @@ Total Outstanding = SUM(fairmoney_details[total_outstanding_amount])
 Total Disbursed = sum(fairmoney_details[amount_disbursed])
 ```
 
+# Analysis
 
+## Findings
+
+- What was discovered?
+Key Insights from FairMoney Loan Repayment Analysis
+**Loan Disbursement Overview**
+Total Disbursed: ₦1,000,000,000
+
+Total Repaid: ₦618,560,000
+
+Total Outstanding: ₦2,000,000,000
+
+Overall Repayment Rate: 26%
+
+**Call Engagement Metrics**
+% Calls Answered: 0.73% (2,264 calls)
+
+% Calls Not Answered: 99.27% (308,298 calls)
+
+**Repayment Rate by Call Status**
+Answered Calls: 27%
+
+Unanswered Calls: 26%
+
+**Repayment Rate by Occupation**
+Ranges between 20% to 33%, depending on the borrower's occupation.
+
+**Customer Segmentation**
+Returning Customers:
+
+% Calls Answered: 42%
+
+Repayment Rate: 27%
+
+New Customers:
+
+% Calls Answered: 48%
+
+Repayment Rate: 23%
+
+**Call Status vs. Repayment Value**
+Repayment When Status = Not Answered:
+
+Unanswered Calls: ₦560,311,533.66
+
+Eventually Answered (but initially 'Not Answered'): ₦40,290,960.27
+
+Repayment When Status = Answered: ₦17,960,316.36
+
+## Interpretation
+- **Interpretation and Key Takeaways**
+**1. Low Call Engagement Despite High Outreach**
+99.27% of calls were not answered, suggesting low engagement with the loan recovery call efforts.
+
+This raises concerns about the effectiveness of the call center strategy and suggests the need to explore alternative or complementary contact methods (e.g., SMS, WhatsApp, in-app notifications).
+
+**2. Minimal Difference in Repayment Rates by Call Status**
+Answered calls have only a slightly higher repayment rate (27%) compared to unanswered calls (26%).
+
+This implies that calls alone may not be the strongest driver of repayment behavior and may need to be combined with other behavioral nudges or incentives.
+
+**3. Repayment Still Occurs Even Without Answering Calls**
+Unanswered calls accounted for ₦560M+ in repayment, far outweighing the ₦18M recovered from answered calls.
+
+Some borrowers repay regardless of call engagement, possibly due to prior commitments or automated deductions, hinting at self-driven repayment behavior.
+
+**4. Customer Type Influences Behavior**
+Returning customers show slightly better behavior than new ones:
+
+Higher call answer rates (42% vs. 48% for new)
+
+Higher repayment rate (27% vs. 23%)
+
+This suggests that relationship history influences trust and repayment commitment, and returning customers may be more reliable.
+
+**5. Occupation Plays a Role in Repayment**
+Repayment rates by occupation range from 20% to 33%, indicating potential for targeted risk assessment.
+
+Some professions may have more predictable income and could represent lower-risk borrowers.
+
+# Recommendations
+- **Enhance Contact Strategies:**
+
+Explore omnichannel reminders (SMS, email, WhatsApp) to supplement phone calls.
+
+Consider the timing and frequency of calls for better engagement.
+
+- **Profile-Based Risk Scoring:**
+
+Use occupation and customer type to refine loan eligibility and follow-up strategies.
+
+- **Invest in Returning Customers:**
+
+Develop loyalty or incentive schemes for repeat borrowers who show higher repayment behavior.
+
+- **Reassess Call Center ROI:**
+
+Given the marginal impact on repayment, re-evaluate the cost-effectiveness of call center operations.
+
+- **Clean and Standardize Data:**
+
+Ensure phone numbers are consistent for accurate joins and tracking.
+
+Standardize state names to improve segmentation and location-based analysis.
