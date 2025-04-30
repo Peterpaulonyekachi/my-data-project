@@ -433,7 +433,11 @@ Total Disbursed = sum(fairmoney_details[amount_disbursed])
 ## Findings
 
 - What was discovered?
+
+  
 Key Insights from FairMoney Loan Repayment Analysis
+
+
 **Loan Disbursement Overview**
 
   
@@ -491,9 +495,11 @@ Eventually Answered (but initially 'Not Answered'): ₦40,290,960.27
 Repayment When Status = Answered: ₦17,960,316.36
 
 ## Interpretation
+
 - **Interpretation and Key Takeaways**
 
 **1. Low Call Engagement Despite High Outreach**
+
 99.27% of calls were not answered, suggesting low engagement with the loan recovery call efforts.
 
 This raises concerns about the effectiveness of the call center strategy and suggests the need to explore alternative or complementary contact methods (e.g., SMS, WhatsApp, in-app notifications).
