@@ -1,4 +1,4 @@
-# my-data-project
+# FairMoney Recovery Performance Analysis
 A data analysis project for Loan Management and Recovery
 
 ![Excel-to-PowerBi-animated-diagram]
